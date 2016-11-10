@@ -71,15 +71,30 @@ func converToString(arr []int) string {
 	var str string
 
 	for i := 0; i < len(arr); i++ {
-		str = strconv.Itoa(arr[i]) + str
+		str += strconv.Itoa(arr[i])
 	}
 
 	return str
 }
 
+func add(numb1, numb2 []int) []int {
+
+	var length int = len(numb1)
+
+	for i := length - 1; i > -1; i-- {
+		numb1[i] += numb2[i]
+
+		if numb1[i] > 9 && i != 0 {
+			numb1[i] -= 10
+			numb1[i-1]++
+		}
+	}
+
+	return numb1
+}
+
 func main() {
 	var input, num1, num2, symbol string
-	// var number1, number2 []int
 
 	fmt.Println("Enter expression: ")
 	fmt.Scanln(&input)
@@ -88,7 +103,9 @@ func main() {
 		num1, num2, symbol = getNumbers(input)
 		number1 := converToArray(num1)
 		number2 := converToArray(num2)
-		fmt.Println(number1, number2, symbol)
+		add(number1, number2)
+		fmt.Println(converToString(number1), symbol)
+		//fmt.Println(number1, number2, symbol)
 	} else {
 		fmt.Println("Expression is not correct.")
 	}
