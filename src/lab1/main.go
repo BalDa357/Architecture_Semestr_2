@@ -150,10 +150,13 @@ return:
 
 func isNegative(numb1, numb2 []int) bool {
 
-	var i = len(numb1) - 1
+	var i = 0
 
 	for numb1[i] == numb2[i] && i != 0 {
-		i--
+		i++
+	}
+	if i != 0 {
+		i++
 	}
 
 	if numb1[i] >= numb2[i] {
