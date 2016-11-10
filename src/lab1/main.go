@@ -8,6 +8,16 @@ import (
 
 var err error
 
+/*
+isCorrect() --- check is correct input data from user or not
+Correct means data in format "number1symbolnumber2"
+
+input:
+	str --- input data from
+return:
+	true if it correct and false if not
+*/
+
 func isCorrect(str string) bool {
 	var length int = len(str)
 	var symbols_count int = 0
@@ -32,6 +42,15 @@ func isCorrect(str string) bool {
 	return true
 }
 
+/*
+getNumbers() --- split data from user into 3 strintgs and make number one length
+				by adding "0"
+input:
+	str --- input data from
+return:
+	number1, number2, + or -
+*/
+
 func getNumbers(str string) (string, string, string) {
 	var num []string
 	var symbol string
@@ -55,6 +74,14 @@ func getNumbers(str string) (string, string, string) {
 	return num[0], num[1], "-"
 }
 
+/*
+converToArray() --- convert string to array of int
+input:
+	str --- string to convert
+return:
+	arr --- array of int
+*/
+
 func converToArray(str string) []int {
 	var arr []int
 	var element int
@@ -67,6 +94,14 @@ func converToArray(str string) []int {
 	return arr
 }
 
+/*
+converToString() --- convert array of int to string
+input:
+	arr --- array of int to convert
+return:
+	str --- string
+*/
+
 func converToString(arr []int) string {
 	var str string
 
@@ -77,7 +112,14 @@ func converToString(arr []int) string {
 	return str
 }
 
-func add(numb1, numb2 []int) []int {
+/*
+add() --- add numbers
+input:
+	numb1,numb2 -- numbers to add
+return:
+	numb1 -- sum
+*/
+func add(numb1, numb2 []int) string {
 
 	var length int = len(numb1)
 
@@ -90,11 +132,65 @@ func add(numb1, numb2 []int) []int {
 		}
 	}
 
-	return numb1
+	return converToString(numb1)
+}
+
+/*
+isNegative() --- check can be result of subtraction negative
+input:
+	numb1,numb2 --- numbers to subtraction
+return:
+	true if result will be negative and false if not
+*/
+
+func isNegative(numb1, numb2 []int) bool {
+
+	var i = len(numb1) - 1
+
+	for numb1[i] == numb2[i] && i != 0 {
+		i--
+	}
+
+	if numb1[i] >= numb2[i] {
+		return false
+	} else {
+		return true
+	}
+}
+
+/*
+sub() --- substract numbers
+input:
+	numb1,numb2 -- numbers to add
+return:
+	numb1 -- result of subtraction
+*/
+func sub(numb1, numb2 []int) string {
+
+	var length int = len(numb1)
+	var prefix string = ""
+
+	if isNegative(numb1, numb2) {
+		tmp := numb1
+		numb1 = numb2
+		numb2 = tmp
+		prefix = "-"
+	}
+
+	for i := length - 1; i > -1; i-- {
+		numb1[i] -= numb2[i]
+
+		if numb1[i] < 0 && i != 0 {
+			numb1[i] += 10
+			numb1[i-1]--
+		}
+	}
+
+	return prefix + converToString(numb1)
 }
 
 func main() {
-	var input, num1, num2, symbol string
+	var input, num1, num2, symbol, result string
 
 	fmt.Println("Enter expression: ")
 	fmt.Scanln(&input)
@@ -103,9 +199,12 @@ func main() {
 		num1, num2, symbol = getNumbers(input)
 		number1 := converToArray(num1)
 		number2 := converToArray(num2)
-		add(number1, number2)
-		fmt.Println(converToString(number1), symbol)
-		//fmt.Println(number1, number2, symbol)
+		if symbol == "+" {
+			result = add(number1, number2)
+		} else {
+			result = sub(number1, number2)
+		}
+		fmt.Println("Result\n" + result)
 	} else {
 		fmt.Println("Expression is not correct.")
 	}
