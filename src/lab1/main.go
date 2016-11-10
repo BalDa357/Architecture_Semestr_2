@@ -104,9 +104,14 @@ return:
 
 func converToString(arr []int) string {
 	var str string
+	var i int = 0
 
-	for i := 0; i < len(arr); i++ {
+	for arr[i] == 0 && i < len(arr)-1 {
+		i++
+	}
+	for i < len(arr) {
 		str += strconv.Itoa(arr[i])
+		i++
 	}
 
 	return str
